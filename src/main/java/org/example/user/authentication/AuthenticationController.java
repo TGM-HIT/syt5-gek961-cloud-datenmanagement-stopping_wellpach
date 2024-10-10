@@ -93,7 +93,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> authenticate(HttpServletRequest request, ) {
+    public ResponseEntity<?> authenticate(HttpServletRequest request) {
         User user = userService.getUserFromRequest(request);
         if (user == null) {
             return ResponseEntity.status(403).body("UNAUTHORIZED");
