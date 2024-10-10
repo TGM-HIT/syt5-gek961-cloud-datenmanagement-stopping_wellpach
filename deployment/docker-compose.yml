@@ -19,6 +19,8 @@ services:
       sh -c "git clone https://github.com/TGM-HIT/syt5-gek961-cloud-datenmanagement-stopping_wellpach.git && cd syt5-gek961-cloud-datenmanagement-stopping_wellpach && mvn clean install && mv file.json target/file.json && cd target && java -jar Cloud_Datenmanagement-1.0-SNAPSHOT.jar"  # Adjust as necessary
     depends_on:
       - db  # Ensure the database is started before this container
+    ports:
+      - "8080:8080"
     networks:
       - mynetwork
 
