@@ -73,12 +73,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/admin/register")
-    public ResponseEntity<?> changeEmail(HttpServletRequest request, @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(HttpServletRequest request, @RequestBody RegisterRequest registerRequest) {
 
         User user = userService.getUserFromRequest(request);
+
         if (user == null) {
             return ResponseEntity.status(403).body("UNAUTHORIZED");
         }
+        System.out.println(user);
+        System.out.println(user.getName());
 
         if(user.getRole() != Role.ADMIN) {
             return ResponseEntity.status(403).body("UNAUTHORIZED");
@@ -87,13 +90,13 @@ public class AuthenticationController {
         return service.register(registerRequest);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
+    @PutMapping("/signin")
+    public ResponseEntity<?> signin(@RequestBody AuthenticationRequest request) {
         return service.authenticate(request);
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> authenticate(HttpServletRequest request) {
+    public ResponseEntity<?> verify(HttpServletRequest request) {
         User user = userService.getUserFromRequest(request);
         if (user == null) {
             return ResponseEntity.status(403).body("UNAUTHORIZED");
