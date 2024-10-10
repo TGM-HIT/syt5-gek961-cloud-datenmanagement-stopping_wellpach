@@ -2,6 +2,51 @@
 
 Dieses Projekt implementiert einen einfachen Webservice zur Benutzerverwaltung. Die Webanwendung bietet Endpunkte zur Registrierung, Anmeldung und Verifizierung von Benutzern. Die Authentifizierung basiert auf JWT-Token und die Daten werden in einer PostgreSQL-Datenbank gespeichert.
 
+
+## Fragestellungen
+
+### Grundlegenden Elemente für eine REST-Schnittstelle
+
+- **Ressourcen**: Diese sind die zentralen Objekte, auf die die Schnittstelle zugreift und die sie verwaltet. Ressourcen werden durch eindeutige URIs identifiziert.
+- **HTTP-Methoden**: REST verwendet standardisierte HTTP-Methoden, um Aktionen auf Ressourcen auszuführen, wie z. B. GET, POST, PUT, DELETE.
+- **Repräsentationen**: Ressourcen werden in bestimmten Formaten wie JSON oder XML repräsentiert, die bei Anfragen und Antworten zwischen Server und Client übertragen werden.
+- **Stateless Interaktionen**: Jede Anfrage vom Client an den Server muss alle notwendigen Informationen enthalten, um die Anfrage zu verarbeiten, da der Server keinen Zustand zwischen den Anfragen speichert.
+- **Statuscodes**: Die Schnittstelle muss HTTP-Statuscodes nutzen, um den Status der Anfrage zu kommunizieren (z. B. 200 OK, 404 Not Found, 401 Unauthorized).
+
+###  Verbindung zu den HTTP-Befehlen
+
+HTTP-Methoden spielen eine zentrale Rolle in der Interaktion mit den Ressourcen einer REST-Schnittstelle. Jede Methode hat eine bestimmte Funktion:
+
+- **GET**: Ruft Daten einer Ressource ab, ohne diese zu verändern. Es wird für Leseoperationen verwendet.
+- **POST**: Dient zum Erstellen einer neuen Ressource auf dem Server. Es wird verwendet, um Daten zu senden und neue Objekte zu erstellen.
+- **PUT**: Aktualisiert eine vorhandene Ressource oder erstellt sie, falls sie noch nicht existiert.
+- **DELETE**: Löscht eine Ressource vom Server.
+- **PATCH**: Aktualisiert teilweise eine Ressource.
+
+Diese Befehle stellen sicher, dass CRUD-Operationen (Create, Read, Update, Delete) auf die Ressourcen anwendbar sind.
+
+### Welche Datenbasis für einen solchen Use-Case?
+
+Für eine REST-API zur Benutzerverwaltung eignet sich eine relationale Datenbank wie **PostgreSQL** oder **MySQL**, da sie Transaktionssicherheit, Datenintegrität und einfache Verwaltung von relationalen Datenmodellen bietet. In Entwicklungs- und Testumgebungen kann eine In-Memory-Datenbank wie **H2** verwendet werden.
+
+Bei einer produktionsreifen Anwendung sollte jedoch eine skalierbare und robuste Datenbank wie PostgreSQL verwendet werden, um eine sichere und performante Datenhaltung zu gewährleisten.
+
+### Erfordernisse bezüglich der Datenbasis?
+
+- **Datenintegrität**: Sicherstellen, dass die gespeicherten Daten korrekt und konsistent sind. Dies schließt die Nutzung von Constraints und Transaktionen ein.
+- **Sicherheit**: Passwörter sollten nie im Klartext gespeichert werden. Es sollte ein sicheres Hashing-Verfahren wie **BCrypt** verwendet werden.
+- **Skalierbarkeit**: Die Datenbank sollte skalierbar sein, um bei zunehmender Benutzerzahl performant zu bleiben. Dies kann durch horizontale oder vertikale Skalierung erreicht werden.
+- **Backups und Wiederherstellung**: Regelmäßige Backups und eine robuste Wiederherstellungsstrategie sind notwendig, um Datenverlust vorzubeugen.
+
+### Eckpunkte bei einer öffentlichen Bereitstellung (Production)
+
+- **Sicherheit**: HTTPS sollte für die Verschlüsselung der Datenübertragung verwendet werden. Außerdem sollten API-Schlüssel oder JWT-Authentifizierung zum Schutz der Schnittstelle vor unbefugtem Zugriff genutzt werden.
+- **Skalierbarkeit**: Die Anwendung sollte so gestaltet werden, dass sie bei steigender Last durch horizontale Skalierung (z. B. Load-Balancing) oder vertikale Skalierung (mehr Ressourcen) erweitert werden kann.
+- **Monitoring und Logging**: Die Server-Performance, API-Anfragen und Fehler sollten kontinuierlich überwacht werden, um Probleme schnell zu erkennen und zu beheben.
+- **Rate-Limiting**: Um Missbrauch der API zu verhindern, sollte eine Begrenzung der Anzahl von Anfragen pro Benutzer/IP implementiert werden.
+- **Fehlertoleranz**: Es sollten Mechanismen implementiert werden, die gewährleisten, dass die Anwendung auch bei Ausfällen einzelner Komponenten oder hoher Last funktionsfähig bleibt.
+- **Datenbank-Optimierung**: Abfragen sollten optimiert sein (z. B. durch Indexierung), um eine schnelle und effiziente Datenverarbeitung zu gewährleisten.
+
 ## Technologien
 
 - **Java 17**
