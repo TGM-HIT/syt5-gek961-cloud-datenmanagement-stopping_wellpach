@@ -72,21 +72,33 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/admin/register")
     public ResponseEntity<?> changeEmail(HttpServletRequest request, @RequestBody RegisterRequest registerRequest) {
 
         User user = userService.getUserFromRequest(request);
-        if (user == null) return null;
+        if (user == null) {
+            return ResponseEntity.status(403).body("UNAUTHORIZED");
+        }
 
         if(user.getRole() != Role.ADMIN) {
-            return ResponseEntity.status(403).body("Forbidden! Not Admin!");
+            return ResponseEntity.status(403).body("UNAUTHORIZED");
         }
 
         return service.register(registerRequest);
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         return service.authenticate(request);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> authenticate(HttpServletRequest request, ) {
+        User user = userService.getUserFromRequest(request);
+        if (user == null) {
+            return ResponseEntity.status(403).body("UNAUTHORIZED");
+        }
+
+        return ResponseEntity.status(200).body(user.getRole().toString());
     }
 }
