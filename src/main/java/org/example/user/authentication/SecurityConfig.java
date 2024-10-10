@@ -1,8 +1,8 @@
 package org.example.user.authentication;
 
-import at.vsa.backend.user.authentication.config.JwtAuthenticationFilter;
-import at.vsa.backend.user.entities.Role;
 import lombok.RequiredArgsConstructor;
+import org.example.user.authentication.config.JwtAuthenticationFilter;
+import org.example.user.entities.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,11 +31,6 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").hasAuthority(String.valueOf(Role.ADMIN))
-                        .requestMatchers("/email/**").permitAll()
-                        .requestMatchers("/assets/**").permitAll()
-                        .requestMatchers("/wakeup/**").permitAll()
-                        .requestMatchers("/payment/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
