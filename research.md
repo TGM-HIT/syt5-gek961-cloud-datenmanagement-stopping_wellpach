@@ -1,4 +1,8 @@
 # User Management Webservice
+**Author:** Stuppnig Markus, Wallpach Melissa
+
+**Version:** 2024-10-10
+
 
 Dieses Projekt implementiert einen einfachen Webservice zur Benutzerverwaltung. Die Webanwendung bietet Endpunkte zur Registrierung, Anmeldung und Verifizierung von Benutzern. Die Authentifizierung basiert auf JWT-Token und die Daten werden in einer PostgreSQL-Datenbank gespeichert.
 
