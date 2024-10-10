@@ -9,9 +9,11 @@ import org.example.user.authentication.protocols.request.AuthenticationRequest;
 import org.example.user.authentication.protocols.request.RegisterRequest;
 import org.example.user.entities.Role;
 import org.example.user.entities.User;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileReader;
@@ -24,17 +26,47 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationController(AuthenticationService service, UserService userService) {
+    public AuthenticationController(AuthenticationService service, UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.service = service;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
 
         this.userService.clearDB();
 
         try (FileReader reader = new FileReader("file.json")) {
             JSONTokener tokener = new JSONTokener(reader);
-            JSONObject jsonObject = new JSONObject(tokener);
-            System.out.println(jsonObject.toString(4));
+            JSONArray jsonArray = new JSONArray(tokener);
+            System.out.println(jsonArray.toString(4));
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                Role role = Role.READER;
+                switch(jsonObject.getString("role")) {
+                    case "admin":
+                        role = Role.ADMIN;
+                        break;
+
+                    case "moderator":
+                        role = Role.MODERATOR;
+                        break;
+
+                    case "reader":
+                        role = Role.READER;
+                        break;
+                }
+
+                var user = User.builder()
+                        .name(jsonObject.getString("name"))
+                        .userid(jsonObject.getString("userid"))
+                        .password(passwordEncoder.encode(jsonObject.getString("password")))
+                        .role(role)
+                        .build();
+
+                userRepository.save(user);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

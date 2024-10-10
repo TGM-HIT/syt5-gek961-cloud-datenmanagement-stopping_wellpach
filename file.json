@@ -1,8 +1,14 @@
 [
   {
-    "name": "Melissa Wallpach"
+    "name": "Melissa Wallpach",
+    "userid": "melissa",
+    "password": "test1",
+    "role": "admin"
   },
   {
-    "name": "Markus Stuppnig"
+    "name": "Markus Stuppnig",
+    "userid": "markus",
+    "password": "test2",
+    "role": "reader"
   }
 ]
