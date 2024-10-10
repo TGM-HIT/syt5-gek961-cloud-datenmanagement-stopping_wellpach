@@ -1,13 +1,19 @@
-version: '3.8'
 services:
   db:
-    image: postgres:13
+    image: postgres:latest
     container_name: postgres-db
     environment:
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: db
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
+
+  java-build:
+    image: jelastic/maven:3.9.9-temurinjdk-21.0.2-almalinux-9 # Update to a valid Maven image
+    container_name: java-build-container
+    command: >
+      sh -c "git clone https://github.com/TGM-HIT/syt5-gek961-cloud-datenmanagement-stopping_wellpach.git && cd syt5-gek961-cloud-datenmanagement-stopping_wellpach && mvn clean install && cd target && java -jar Cloud_Datenmanagement-1.0-SNAPSHOT.jar"  # Adjust as necessary
+    depends_on:
+      - db  # Ensure the database is started before this container
