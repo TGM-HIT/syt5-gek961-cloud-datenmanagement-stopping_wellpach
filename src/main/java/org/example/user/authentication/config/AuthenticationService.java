@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public ResponseEntity<?> register(RegisterRequest request) throws IOException {
+    public ResponseEntity<?> register(RegisterRequest request) {
 
         if(this.userRepository.findByUserid(request.getUserid()).isPresent()) {
             System.out.println("User with userid: " + request.getUserid() + " already exists!");
@@ -35,21 +35,39 @@ public class AuthenticationService {
             return ResponseEntity.status(409).body("User with email: " + request.getUserid() + " already exists!");
         }
 
+        System.out.println("Name: " + request.getName());
+
+        Role role = Role.READER;
+        switch(request.getRole()) {
+            case "admin":
+                role = Role.ADMIN;
+                break;
+
+            case "moderator":
+                role = Role.MODERATOR;
+                break;
+
+            case "reader":
+                role = Role.READER;
+                break;
+        }
+
         var user = User.builder()
                 .name(request.getName())
                 .userid(request.getUserid())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ADMIN)
+                .role(role)
                 .build();
 
         userRepository.save(user);
 
-        var jwtToken = jwtService.generateToken(user);
+//        var jwtToken = jwtService.generateToken(user);
+//
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("token", jwtToken);
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("token", jwtToken);
-
-        return ResponseEntity.ok().body(JSONObject.toJSONString(map));
+//        return ResponseEntity.ok().body(JSONObject.toJSONString(map));
+        return ResponseEntity.ok().body("worked");
     }
 
     public ResponseEntity<?> authenticate(AuthenticationRequest request) {
