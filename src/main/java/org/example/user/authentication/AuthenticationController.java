@@ -18,8 +18,6 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService service;
-    private final UserRepository userRepository;
-    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {

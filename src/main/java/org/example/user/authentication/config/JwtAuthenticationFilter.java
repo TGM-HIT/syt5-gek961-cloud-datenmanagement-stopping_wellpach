@@ -37,13 +37,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(BEARER.length());
         try {
-            userid = jwtService.extractEmail(jwt);
+            userid = jwtService.extractUserId(jwt);
         }catch(MalformedJwtException e) {
             return;
         }
 
         if(SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userid);
             if(jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

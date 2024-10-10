@@ -37,7 +37,7 @@ public class AuthenticationService {
 
         var user = User.builder()
                 .name(request.getName())
-                .userId(request.getUserid())
+                .userid(request.getUserid())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ADMIN)
                 .build();
