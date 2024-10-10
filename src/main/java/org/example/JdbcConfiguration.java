@@ -48,7 +48,7 @@ public class JdbcConfiguration {
         em.setJpaProperties(properties);
 
         // Specify the packages to scan for entity classes
-        em.setPackagesToScan("org.example.entities");  // Adjust package name to your project structure
+        em.setPackagesToScan("org.example.user.entities");  // Adjust package name to your project structure
 
         return em;
     }
